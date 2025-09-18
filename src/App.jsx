@@ -11,7 +11,7 @@ const API_KEY = import.meta.env.VITE_OMDB_API_KEY;
 function App() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);  
-
+  const [error, setError] = useState(null); // 1. Add error state
   useEffect(() => {
   const defaultSearches = ['Batman', 'Avengers', 'Star Wars', 'Shrek'];
   const randomIndex = Math.floor(Math.random() * defaultSearches.length);
@@ -23,6 +23,7 @@ function App() {
   
   const handleSearch = async (searchTerm) => {
     setLoading(true);
+    setError(null); // 2. Clear previous errors on a new search
     const response = await fetch(`https://www.omdbapi.com/?s=${searchTerm}&apikey=${API_KEY}`);
     const data = await response.json();
 
@@ -34,6 +35,8 @@ function App() {
       setMovies(uniqueMovies);
     } else {
       setMovies([]);
+       // 3. Set an error message if no movies are found
+      setError(`No movies found for "${searchTerm}"`);
     }
     setLoading(false);
   };
@@ -42,7 +45,8 @@ function App() {
     <div>
       <h1>🎬 My Movie App</h1>
       <SearchBar onSearch={handleSearch} />
-      <MovieList movies={movies} loading={loading} />
+        {/* 4. Pass the error state down to the list */}
+      <MovieList movies={movies} loading={loading} error={error} />
     </div>
   );
 }
