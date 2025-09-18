@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css';
@@ -12,6 +12,14 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);  
 
+  useEffect(() => {
+  const defaultSearches = ['Batman', 'Avengers', 'Star Wars', 'Shrek'];
+  const randomIndex = Math.floor(Math.random() * defaultSearches.length);
+  const randomTerm = defaultSearches[randomIndex];
+  
+  handleSearch(randomTerm);
+}, []);
+  // Fetch movies based on the search term  
   
   const handleSearch = async (searchTerm) => {
     setLoading(true);
