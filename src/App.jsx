@@ -10,8 +10,11 @@ const API_KEY = import.meta.env.VITE_OMDB_API_KEY;
 
 function App() {
   const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(false);  
 
+  
   const handleSearch = async (searchTerm) => {
+    setLoading(true);
     const response = await fetch(`https://www.omdbapi.com/?s=${searchTerm}&apikey=${API_KEY}`);
     const data = await response.json();
 
@@ -24,13 +27,14 @@ function App() {
     } else {
       setMovies([]);
     }
+    setLoading(false);
   };
 
   return (
     <div>
       <h1>🎬 My Movie App</h1>
       <SearchBar onSearch={handleSearch} />
-      <MovieList movies={movies} />
+      <MovieList movies={movies} loading={loading} />
     </div>
   );
 }
